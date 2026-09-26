@@ -1,0 +1,5 @@
+Retrieval-Augmented Generation (RAG) combines information retrieval with text generation. A typical RAG system divides source documents into smaller chunks, transforms those chunks into vector embeddings, and stores the vectors in an index. At query time, the system embeds the user's question and retrieves chunks whose vectors are similar to the query vector.
+
+Chunk size influences retrieval behavior. Very small chunks can improve specificity but may lose surrounding context. Very large chunks preserve more context but can introduce irrelevant text into the prompt. Chunk overlap is commonly used to reduce information loss at chunk boundaries.
+
+The generator should be treated as a replaceable component. Retrieval can be evaluated independently from generation by inspecting retrieved chunks, similarity scores, ranks, source metadata, and latency. This separation makes it easier to determine whether a poor answer originated in document processing, retrieval, prompting, or generation.
