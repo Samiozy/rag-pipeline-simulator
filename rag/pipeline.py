@@ -7,7 +7,7 @@ from rag.embeddings.base import EmbeddingProvider
 from rag.vectorstores.base import VectorStore
 from rag.generation.base import Generator
 from rag.retrieval.reranker import Reranker, NoOpReranker
-from rag.prompts import build_rag_prompt
+from rag.prompts import build_rag_prompt, build_retrieval_query
 
 
 @dataclass
@@ -18,6 +18,7 @@ class QueryOutput:
     answer: str
     retrieval_ms: float
     generation_ms: float
+    retrieval_query: str = ""
 
 
 class RAGPipeline:
@@ -57,9 +58,11 @@ class RAGPipeline:
         temperature: float = 0.2,
         max_tokens: int = 700,
         system_prompt: Optional[str] = None,
+        history: Optional[list[tuple[str, str]]] = None,
     ) -> QueryOutput:
+        retrieval_query = build_retrieval_query(question, history)
         started = perf_counter()
-        results = self.retrieve(question, top_k, threshold, rerank_top_n)
+        results = self.retrieve(retrieval_query, top_k, threshold, rerank_top_n)
         retrieval_ms = (perf_counter() - started) * 1000
 
         context = []
@@ -67,9 +70,12 @@ class RAGPipeline:
             metadata = dict(result.chunk.metadata)
             metadata["source"] = result.chunk.source
             context.append((result.chunk.text, metadata))
-        prompt = build_rag_prompt(question, context, system_prompt) if system_prompt else build_rag_prompt(question, context)
+        prompt_kwargs = {"history": history}
+        if system_prompt:
+            prompt_kwargs["system_prompt"] = system_prompt
+        prompt = build_rag_prompt(question, context, **prompt_kwargs)
 
         started = perf_counter()
         answer = self.generator.generate(prompt, temperature=temperature, max_tokens=max_tokens)
         generation_ms = (perf_counter() - started) * 1000
-        return QueryOutput(question, results, prompt, answer, retrieval_ms, generation_ms)
+        return QueryOutput(question, results, prompt, answer, retrieval_ms, generation_ms, retrieval_query)
