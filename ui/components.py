@@ -25,11 +25,11 @@ STEPS = [
 def render_header() -> None:
     st.markdown(
         """
-        <div class="hero-kicker">Local RAG laboratory</div>
-        <h1 class="hero-title">See how a question becomes an answer</h1>
+        <div class="hero-kicker">RAG Systems Laboratory</div>
+        <h1 class="hero-title">Compare how different RAG designs retrieve</h1>
         <p class="hero-copy">
-            Upload documents, watch them get chunked and retrieved, then inspect the exact
-            context sent to the generator. Start offline — no API key required.
+            Inspect every stage, switch architectures, and compare them on the same question.
+            Start offline — no API key required.
         </p>
         """,
         unsafe_allow_html=True,

@@ -1,4 +1,3 @@
-from .base import Generator
-from .factory import create_generator
+from core.generation import Generator, create_generator
 
 __all__ = ["Generator", "create_generator"]

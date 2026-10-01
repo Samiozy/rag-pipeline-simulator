@@ -2,11 +2,11 @@ from typing import Optional
 
 import streamlit as st
 
-from rag.pipeline import QueryOutput
+from core.models import GenerationResult
 from ui.retrieval_view import render_retrieval
 
 
-def render_transcript(turns: list[QueryOutput]) -> None:
+def render_transcript(turns: list[GenerationResult]) -> None:
     if not turns:
         st.info("Ask a first question, then follow up in the same conversation. Retrieval still runs on every turn.")
         return
@@ -16,7 +16,7 @@ def render_transcript(turns: list[QueryOutput]) -> None:
             st.markdown(turn.question)
         with st.chat_message("assistant"):
             st.markdown(turn.answer)
-            caption = f"Turn {index} · {turn.retrieval_ms:.0f} ms retrieve · {turn.generation_ms:.0f} ms generate"
+            caption = f"Turn {index} · {turn.strategy or 'rag'} · {turn.retrieval_ms:.0f} ms retrieve · {turn.generation_ms:.0f} ms generate"
             if turn.retrieval_query and turn.retrieval_query != turn.question:
                 caption += " · follow-up retrieval used prior questions"
             st.caption(caption)
@@ -27,7 +27,7 @@ def render_transcript(turns: list[QueryOutput]) -> None:
                 render_retrieval(turn.retrieved)
 
 
-def selected_turn(turns: list[QueryOutput], widget_key: str) -> Optional[QueryOutput]:
+def selected_turn(turns: list[GenerationResult], widget_key: str) -> Optional[GenerationResult]:
     if not turns:
         return None
     if len(turns) == 1:

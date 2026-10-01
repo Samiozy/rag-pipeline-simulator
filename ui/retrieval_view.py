@@ -19,8 +19,9 @@ def render_retrieval(results: list[RetrievalResult]) -> None:
     st.caption("These are the passages the generator was allowed to use, ranked by similarity.")
     for result in results:
         page = result.chunk.metadata.get("page")
+        modality = result.chunk.metadata.get("modality", "text")
         location = f"{result.chunk.source}" + (f" · page {page}" if page else "")
-        title = f"#{result.rank}  {location}"
+        title = f"#{result.rank}  [{modality}]  {location}"
         with st.expander(title, expanded=result.rank == 1):
             st.markdown(score_bar_html(result.score, low, high), unsafe_allow_html=True)
             st.write(result.chunk.text)
@@ -31,6 +32,7 @@ def render_retrieval(results: list[RetrievalResult]) -> None:
                 "rank": result.rank,
                 "score": round(result.score, 4),
                 "source": result.chunk.source,
+                "modality": result.chunk.metadata.get("modality", "text"),
                 "page": result.chunk.metadata.get("page", ""),
                 "preview": result.chunk.text[:220].replace("\n", " "),
             }

@@ -1,10 +1,3 @@
-from typing import Optional
-from .base import EmbeddingProvider
+from core.embeddings.registry import create_embedder
 
-
-def create_embedder(provider: str, model_name: str, api_key: Optional[str] = None) -> EmbeddingProvider:
-    if provider == "OpenAI":
-        from .openai_embedding import OpenAIEmbedding
-        return OpenAIEmbedding(model_name=model_name, api_key=api_key)
-    from .sentence_transformer import SentenceTransformerEmbedding
-    return SentenceTransformerEmbedding(model_name=model_name)
+__all__ = ["create_embedder"]

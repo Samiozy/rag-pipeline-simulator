@@ -1,3 +1,3 @@
-from .reranker import Reranker, NoOpReranker, CrossEncoderReranker
+from core.reranking import CrossEncoderReranker, IdentityReranker as NoOpReranker, Reranker
 
 __all__ = ["Reranker", "NoOpReranker", "CrossEncoderReranker"]

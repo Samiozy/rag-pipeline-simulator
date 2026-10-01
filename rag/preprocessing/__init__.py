@@ -1,3 +1,3 @@
-from .cleaner import clean_text, clean_documents
+from core.preprocessing import clean_documents, clean_text
 
-__all__ = ["clean_text", "clean_documents"]
+__all__ = ["clean_documents", "clean_text"]

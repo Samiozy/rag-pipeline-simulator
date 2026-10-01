@@ -1,10 +1,3 @@
-from dataclasses import dataclass, field
-from typing import Any
+from core.models.chunk import Chunk
 
-
-@dataclass
-class Chunk:
-    id: str
-    text: str
-    source: str
-    metadata: dict[str, Any] = field(default_factory=dict)
+__all__ = ["Chunk"]

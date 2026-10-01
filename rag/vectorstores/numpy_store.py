@@ -1,37 +1,3 @@
-from typing import Optional
-import numpy as np
-from models import Chunk, RetrievalResult
-from .base import VectorStore
+from core.vectorstores.numpy_store import NumpyVectorStore
 
-
-class NumpyVectorStore(VectorStore):
-    """Portable cosine-similarity backend with no dedicated vector DB dependency."""
-
-    def __init__(self):
-        self.embeddings: Optional[np.ndarray] = None
-        self.chunks: list[Chunk] = []
-
-    def add(self, chunks: list[Chunk], embeddings: np.ndarray) -> None:
-        vectors = np.asarray(embeddings, dtype="float32")
-        norms = np.linalg.norm(vectors, axis=1, keepdims=True)
-        self.embeddings = vectors / np.clip(norms, 1e-12, None)
-        self.chunks = list(chunks)
-
-    def search(self, query_embedding: np.ndarray, k: int = 5, threshold: float = 0.0) -> list[RetrievalResult]:
-        if self.embeddings is None or not self.chunks:
-            return []
-        query = np.asarray(query_embedding, dtype="float32")
-        query = query / max(float(np.linalg.norm(query)), 1e-12)
-        scores = self.embeddings @ query
-        indices = np.argsort(scores)[::-1][:k]
-        results: list[RetrievalResult] = []
-        for idx in indices:
-            score = float(scores[idx])
-            if score < threshold:
-                continue
-            results.append(RetrievalResult(self.chunks[int(idx)], score, len(results) + 1))
-        return results
-
-    def clear(self) -> None:
-        self.embeddings = None
-        self.chunks = []
+__all__ = ["NumpyVectorStore"]

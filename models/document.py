@@ -1,9 +1,3 @@
-from dataclasses import dataclass, field
-from typing import Any
+from core.models.document import Document
 
-
-@dataclass
-class Document:
-    text: str
-    source: str
-    metadata: dict[str, Any] = field(default_factory=dict)
+__all__ = ["Document"]

@@ -1,5 +1,3 @@
-from .document import Document
-from .chunk import Chunk
-from .retrieval_result import RetrievalResult
+from core.models import Chunk, ContextItem, Document, RetrievalResult
 
-__all__ = ["Document", "Chunk", "RetrievalResult"]
+__all__ = ["Chunk", "ContextItem", "Document", "RetrievalResult"]

@@ -2,7 +2,7 @@ from typing import Optional
 
 import streamlit as st
 
-from rag.pipeline import QueryOutput
+from core.models import GenerationResult
 
 
 def _split_prompt(prompt: str) -> dict[str, str]:
@@ -38,12 +38,12 @@ def _split_prompt(prompt: str) -> dict[str, str]:
     return parts
 
 
-def render_prompt(output: Optional[QueryOutput]) -> None:
+def render_prompt(output: Optional[GenerationResult]) -> None:
     if not output:
-        st.info("Ask a question in the Ask tab to see the exact prompt the generator received.")
+        st.info("Ask a question to see the exact prompt the generator received.")
         return
 
-    st.caption("This is the full message constructed from your instructions, conversation so far, retrieved chunks, and the latest question.")
+    st.caption("This is the full message constructed from instructions, conversation, retrieved chunks, and the latest question.")
     structured, raw = st.tabs(["Readable view", "Raw prompt"])
 
     parts = _split_prompt(output.prompt)

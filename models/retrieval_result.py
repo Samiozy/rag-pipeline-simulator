@@ -1,9 +1,3 @@
-from dataclasses import dataclass
-from .chunk import Chunk
+from core.models.retrieval_result import RetrievalResult
 
-
-@dataclass
-class RetrievalResult:
-    chunk: Chunk
-    score: float
-    rank: int = 0
+__all__ = ["RetrievalResult"]

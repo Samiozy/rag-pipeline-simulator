@@ -1,7 +1,3 @@
-from abc import ABC, abstractmethod
+from core.generation.base import Generator
 
-
-class Generator(ABC):
-    @abstractmethod
-    def generate(self, prompt: str, temperature: float = 0.2, max_tokens: int = 700) -> str:
-        raise NotImplementedError
+__all__ = ["Generator"]
